@@ -1,2 +1,2 @@
-# A l'hora de fer commit ignora els archius en binari resultants de complirar el programa #
+# A l'hora de fer commit ignora els arxius en binari resultants de complirar el programa #
 *.x
