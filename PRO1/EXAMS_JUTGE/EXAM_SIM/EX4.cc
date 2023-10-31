@@ -21,7 +21,7 @@ int main() {
       }
 
       for(int i = 0; i < m; ++i) print_solid_line(side);
-      cout << '#' << endl;
+      cout << '#' << endl << endl;
    }
 }
 
