@@ -1,8 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int main()
-{
+int main() {
    int n; // Siendo n un numero natural expresado en segundos (Entrada)
    int h, m, s; // Siendo h horas, m minutos y s segundos (Salidas)
 
