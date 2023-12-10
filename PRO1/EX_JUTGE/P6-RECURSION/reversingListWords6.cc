@@ -2,17 +2,19 @@
 #include <iostream>
 using namespace std;
 
-void print_list(int& n) {
-   ++n;
+void print_list(int& n, int& n_copy) {
    string s;
    if (cin >> s) {
-      print_list(n);
-      if (0 <= n) cout << s << endl;
+      ++n;
+      n_copy = n;
+      print_list(n, n_copy);
+      if (n < n_copy/2) cout << s << endl;
    }
-   n -= 2;
+   --n;
 }
 
 int main() {
    int n = 0;
-   print_list(n);
+   int n_copy = 0;
+   print_list(n, n_copy);
 }
