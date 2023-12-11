@@ -5,11 +5,10 @@ using namespace std;
 
 int evaluate(const vector<int>& p, int x) {
    int l = p.size();
-   int x_pow = x;
-   int r = p[0]; // at least the result will be the independent term.
-   for (int i = 1; i < l; ++i) {
-      r += p[i]*x_pow; //evaluate grade i expresion
-      x_pow *= x; //prepare x for the next iterations
+   int r = p[l - 1];
+   for (int i = l - 2; i >= 0; --i) {
+      r *= x; //     If exists another term, multiply all by x
+      r += p[i]; //  and add it as an independent ternm.
    }
    return r;
 }
