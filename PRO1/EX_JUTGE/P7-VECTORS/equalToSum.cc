@@ -3,34 +3,24 @@
 #include <vector>
 using namespace std;
 
-void ini_vector(vector<int>& v, int l) {
-   for (int i = 0; i < l; ++i) cin >> v[i];
-}
-
-/**
- * PRE: i is the index of the element we need to omit
- * POST: returns the sum of all elements minus v[i];
-*/
-int check_sum(const vector<int>& v, int i) {
-   int l = v.size();
-   int r = 0;
-   for (int j = 0; j < l; ++j) {
-      if(j != i) r+= v[j];
-   }
-   return r;
-}
-
 int main() {
    int n;
    while (cin >> n) {
       vector<int> v(n);
-      ini_vector(v, n);
+      int total = 0;
+
+      for (int i = 0; i < n; ++i) { // Lectura y calculo del total
+         cin >> v[i];
+         total += v[i];
+      }
+
       bool found = false;
       int i = 0;
       while (i < n and not found) {
-         found = v[i] == check_sum(v, i);
+         if (v[i] == total - v[i]) found = true; // Comparamos con el total menos el mismo
          ++i;
       }
+
       if (found) cout << "YES" << endl;
       else cout << "NO" << endl;
    }
