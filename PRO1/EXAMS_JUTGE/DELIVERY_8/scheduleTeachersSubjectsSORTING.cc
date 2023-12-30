@@ -113,15 +113,17 @@ int main() {
       
       for (int j = data_set[i].h_begin; j < data_set[i].h_end; ++i) {
          // Da igual si se esta dando otra clase de la misma asignatura
-         table[data_set[i].h_begin][i_day].listsubjects.push_back(data_set[i].subject);
+         table[j][i_day].listsubjects.push_back(data_set[i].subject);
          
          if (i == 0) {
-            table[i][i_day].listteachers.push_back(input.teacher);
+            table[j][i_day].listteachers.push_back(data_set[i].teacher);
          } else { // Cualquier otro caso que no sea el primero de la lista
             if (data_set[i-1].day == data_set[i].day and data_set[i-1].teacher == data_set[i].teacher) {
                if (data_set[i-1].h_begin <= j and j < data_set[i-1].h_end) {
                   ++teacher_colisions;
                }
+            } else {
+               table[j][i_day].listteachers.push_back(data_set[i].teacher);
             }
          }
       }
@@ -129,31 +131,31 @@ int main() {
 
    cout << "COLISIONES: " << teacher_colisions << endl;
 
-   // // Table header
-   // cout << "number of subjects per slot:" << endl;
-   // cout << " h    monday   tuesday wednesday  thursday    friday" << endl;
-   // for (int i = min_hour; i < max_hour; ++i) {
-   //    print_slot(2, i);
-   //    print_slot(10, table[i][0].listsubjects.size());
-   //    print_slot(10, table[i][1].listsubjects.size());
-   //    print_slot(10, table[i][2].listsubjects.size());
-   //    print_slot(10, table[i][3].listsubjects.size());
-   //    print_slot(10, table[i][4].listsubjects.size());
-   //    cout << endl;
-   // }
+   // Table header
+   cout << "number of subjects per slot:" << endl;
+   cout << " h    monday   tuesday wednesday  thursday    friday" << endl;
+   for (int i = min_hour; i < max_hour; ++i) {
+      print_slot(2, i);
+      print_slot(10, table[i][0].listsubjects.size());
+      print_slot(10, table[i][1].listsubjects.size());
+      print_slot(10, table[i][2].listsubjects.size());
+      print_slot(10, table[i][3].listsubjects.size());
+      print_slot(10, table[i][4].listsubjects.size());
+      cout << endl;
+   }
 
-   // // Table header
-   // cout << "number of teachers per slot:" << endl;
-   // cout << " h    monday   tuesday wednesday  thursday    friday" << endl;
-   // for (int i = min_hour; i < max_hour; ++i) {
-   //    print_slot(2, i);
-   //    print_slot(10, table[i][0].listteachers.size());
-   //    print_slot(10, table[i][1].listteachers.size());
-   //    print_slot(10, table[i][2].listteachers.size());
-   //    print_slot(10, table[i][3].listteachers.size());
-   //    print_slot(10, table[i][4].listteachers.size());
-   //    cout << endl;
-   // }
+   // Table header
+   cout << "number of teachers per slot:" << endl;
+   cout << " h    monday   tuesday wednesday  thursday    friday" << endl;
+   for (int i = min_hour; i < max_hour; ++i) {
+      print_slot(2, i);
+      print_slot(10, table[i][0].listteachers.size());
+      print_slot(10, table[i][1].listteachers.size());
+      print_slot(10, table[i][2].listteachers.size());
+      print_slot(10, table[i][3].listteachers.size());
+      print_slot(10, table[i][4].listteachers.size());
+      cout << endl;
+   }
 
    for (int i = 0; i < l; ++i) {
       cout << data_set[i].subject << ' ';
