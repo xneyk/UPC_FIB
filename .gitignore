@@ -1,2 +1,4 @@
 # A l'hora de fer commit ignora els arxius en binari resultants de complirar el programa #
 *.x
+# Ignorem la carpeta del segon MOCK_EXAM ja que no estan resolts tots els exercicis. #
+PRO1/MOCK_EXAM2/
