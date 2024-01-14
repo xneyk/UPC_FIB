@@ -1,5 +1,4 @@
 //X69097 Sort matrix rows
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
