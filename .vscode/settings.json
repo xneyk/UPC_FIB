@@ -27,6 +27,12 @@
       "unordered_map": "cpp",
       "utility": "cpp",
       "variant": "cpp",
-      "iosfwd": "cpp"
+      "iosfwd": "cpp",
+      "stack": "cpp",
+      "queue": "cpp",
+      "deque": "cpp",
+      "list": "cpp",
+      "map": "cpp",
+      "set": "cpp"
    }
 }
