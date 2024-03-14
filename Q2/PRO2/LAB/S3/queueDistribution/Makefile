@@ -2,7 +2,6 @@ OPCIONS = -D_JUDGE_ -D_GLIBCXX_DEBUG -O2 -Wall -Wextra -Werror -Wno-sign-compare
 
 program.exe: program.o CuaIOParInt.o ParInt.o
 	g++ -o program.exe program.o CuaIOParInt.o ParInt.o
-	tar -cvf program.tar program.cc CuaIOParInt.cc CuaIOParInt.hh
 
 ParInt.o:  ParInt.cc ParInt.hh 
 	g++ -c ParInt.cc $(OPCIONS)
@@ -13,8 +12,8 @@ CuaIOParInt.o:  CuaIOParInt.cc CuaIOParInt.hh
 program.o: program.cc
 	g++ -c program.cc $(OPCIONS)
 
-# tar: program.cc CuaIOParInt.cc CuaIOParInt.hh
-# 	tar -cvf program.tar program.cc CuaIOParInt.cc CuaIOParInt.hh
+tar: program.cc CuaIOParInt.cc CuaIOParInt.hh
+	tar -cvf program.tar program.cc CuaIOParInt.cc CuaIOParInt.hh
 
 clean:
 	rm -f *.o
