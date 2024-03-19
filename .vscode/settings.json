@@ -33,6 +33,10 @@
       "deque": "cpp",
       "list": "cpp",
       "map": "cpp",
-      "set": "cpp"
+      "set": "cpp",
+      "*.tcc": "cpp",
+      "__tree": "cpp",
+      "format": "cpp",
+      "span": "cpp"
    }
 }
