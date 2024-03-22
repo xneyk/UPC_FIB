@@ -7,8 +7,7 @@ using namespace std;
 void ini_queues(vector<queue<string>> &queues, int n) {
    string people_list;
    getline(cin, people_list); 
-   // ^-- Consumeix una linea en blanc que no entenc perque :(
-   // Penso que pot ser que consumeix el "\n" del final de linea que
+   // ^-- Consumeix el "\n" del final de linea que
    // ve despres de consumir el nombre n des del main
    
    for (int i = 0; i < n; ++i) { // ini every queue
