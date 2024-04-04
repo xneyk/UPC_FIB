@@ -4,13 +4,12 @@
 
 using namespace std;
 
-
 int longest_prefix(string word) {
    stack<char> s;
    char c;
    int i = 0, prefix_index = 0;
    istringstream iss_word(word);
-
+   
    while (iss_word >> c) {
       if (c == '(' || c == '[') s.push(c);
       else if (c == ')') {

@@ -2,9 +2,15 @@
 #include <queue>
 using namespace std;
 
-void update_min_max(int n, int &min, int &max) {
-   if (n > max) max = n;
-   else if (n < min) min = n;
+void update_min_max(int n, int &old_min, int &min, int &old_max, int &max) {
+   if (n > max) {
+      old_max = max;
+      max = n;
+   }
+   else if (n < min) {
+      old_min = min;
+      min = n;
+   }
 }
 
 double calc_average(queue<int> q) {
@@ -27,18 +33,24 @@ void print_data(int min, int max, double average) {
 }
 
 int main() {
-   int n, max, min;
+   int n, max, old_max, old_min, min;
+   int poped_element;
    queue<int> q;
    
    cin >> n;
-   max = min = n;
+   old_max = max = old_min = min = n;
    while (-1001 <= n && n <= 1000) {
       if (n != -1001) q.push(n);
-      else if (!q.empty()) q.pop();
-      // !Veure si he eliminat el minim o el maxim!
+      else if (!q.empty()) {
+         poped_element = q.front();
+         q.pop();
+
+         if (poped_element == max) max = old_max;
+         else if (poped_element == min) min = old_min;
+      }
 
       if (!q.empty()) {
-         if (n != -1001) update_min_max(n, min, max);
+         if (n != -1001) update_min_max(n, old_min, min, old_max, max);
          print_data(min, max, calc_average(q));
       }
       else cout << 0;
