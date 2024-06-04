@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ private:
   Item *first;
   Item *last;
   int _size;
-  
+  map<int, Item* > *index_table;
 
   void copyItems(const Item *item, Item *(&first), Item *(&last), int &_size)
   {
@@ -52,6 +53,7 @@ public:
   Queue() {
     first = last = NULL;
     _size = 0;
+    index_table = new map<int, Item* >();
   }
 
   Queue(Queue &q)
@@ -62,12 +64,14 @@ public:
   ~Queue() {
     deleteItems(first);
     _size = 0;
+    delete index_table;
   }
 
   Queue &operator=(const Queue &q) {
     if (this != &q) {
       deleteItems(first);
       copyItems(q.first, first, last, _size);
+      q.index_table = index_table;
     }
     return *this;
   }
@@ -89,6 +93,7 @@ public:
     first = first-> next;
     delete aux;
     _size--;
+    (*index_table).erase(_size);
     if (first == NULL) last = NULL;
   }
 
@@ -103,6 +108,7 @@ public:
     }
     last->next = pitem;
     last = pitem;
+    (*index_table)[_size] = last;
     _size++;
   }
 
@@ -118,12 +124,7 @@ public:
   // Post: Retorna l'i-èssim valor de la cua implícita (indexat començant des de 0).
   // Descomenteu les següents dues linies i implementeu el mètode:
   T operator[](int i) const {
-    Item *item = first;
-    while (i > 0) {
-      item = item->next;
-      --i;
-    }
-    return item->value;
+    return (*index_table)[i]->value;
   }
 
 };
