@@ -1,157 +1,148 @@
 #include <iostream>
-#include <map>
 
 using namespace std;
 
 template <typename T>
 class Queue {
+  private:
+   struct Item {
+      T value;
+      Item *next;
+   };
 
-private:
-  struct Item {
-    T value;
-    Item *next;
-  };
+   Item *first;
+   Item *last;
+   int _size;
 
-  Item *first;
-  Item *last;
-  int _size;
-  map<int, Item* > *index_table;
-
-  void copyItems(const Item *item, Item *(&first), Item *(&last), int &_size)
-  {
-    if (item == NULL) {
-      first = NULL;
-      last = NULL;
-      _size = 0;
-      return;
-    }
-    first = new Item();
-    first->value = item->value;
-    last = first;
-    _size = 1;
-    while (item->next != NULL) {
-      last->next = new Item();
-      last = last->next;
-      item = item->next;
-      last->value = item->value;
-      _size++;
-    }
-    last->next = NULL;
-  }
-
-
-  void deleteItems(Item *item) {
-    while (item != NULL) {
-      Item *aux = item;
-      item = item->next;
-      delete aux;
-    }
-  }
-  
-public:
-
-  Queue() {
-    first = last = NULL;
-    _size = 0;
-    index_table = new map<int, Item* >();
-  }
-
-  Queue(Queue &q)
-  {
-    copyItems(q.first, first, last, _size);
-  }
-
-  ~Queue() {
-    deleteItems(first);
-    _size = 0;
-    delete index_table;
-  }
-
-  Queue &operator=(const Queue &q) {
-    if (this != &q) {
-      deleteItems(first);
-      copyItems(q.first, first, last, _size);
-      q.index_table = index_table;
-    }
-    return *this;
-  }
-
-  T front() {
-    if (first == NULL) {
-      cerr << "Error: front on empty queue" << endl;
-      exit(0);
-    }
-    return first->value;
-  }
-
-  void pop() {
-    if (first == NULL) {
-      cerr << "Error: pop on empty queue" << endl;
-      exit(0);
-    }
-    Item *aux = first;
-    first = first-> next;
-    delete aux;
-    _size--;
-    (*index_table).erase(_size);
-    if (first == NULL) last = NULL;
-  }
-
-  void push(T value) {
-    Item *pitem = new Item();
-    pitem->value = value;
-    pitem->next = NULL;
-    if (first == NULL) {
-      first = last = pitem;
+   void copyItems(const Item *item, Item *(&first), Item *(&last), int &_size) {
+      if (item == NULL) {
+         first = NULL;
+         last = NULL;
+         _size = 0;
+         return;
+      }
+      first = new Item();
+      first->value = item->value;
+      last = first;
       _size = 1;
-      return;
-    }
-    last->next = pitem;
-    last = pitem;
-    (*index_table)[_size] = last;
-    _size++;
-  }
+      while (item->next != NULL) {
+         last->next = new Item();
+         last = last->next;
+         item = item->next;
+         last->value = item->value;
+         _size++;
+      }
+      last->next = NULL;
+   }
 
-  int size() {
-    return _size;
-  }
+   void deleteItems(Item *item) {
+      while (item != NULL) {
+         Item *aux = item;
+         item = item->next;
+         delete aux;
+      }
+   }
 
-  template<typename U> friend ostream &operator<<(ostream &os, Queue<U> &q);
+  public:
+   Queue() {
+      first = last = NULL;
+      _size = 0;
+   }
 
-  template<typename U> friend istream &operator>>(istream &is, Queue<U> &q);
- 
-  // Pre: i està entre 0 i la mida de la cua implícita menys 1.
-  // Post: Retorna l'i-èssim valor de la cua implícita (indexat començant des de 0).
-  // Descomenteu les següents dues linies i implementeu el mètode:
-  T operator[](int i) const {
-    return (*index_table)[i]->value;
-  }
+   Queue(Queue &q) {
+      copyItems(q.first, first, last, _size);
+   }
 
+   ~Queue() {
+      deleteItems(first);
+      _size = 0;
+   }
+
+   Queue &operator=(const Queue &q) {
+      if (this != &q) {
+         deleteItems(first);
+         copyItems(q.first, first, last, _size);
+      }
+      return *this;
+   }
+
+   T front() {
+      if (first == NULL) {
+         cerr << "Error: front on empty queue" << endl;
+         exit(0);
+      }
+      return first->value;
+   }
+
+   void pop() {
+      if (first == NULL) {
+         cerr << "Error: pop on empty queue" << endl;
+         exit(0);
+      }
+      Item *aux = first;
+      first = first->next;
+      delete aux;
+      _size--;
+      if (first == NULL) last = NULL;
+   }
+
+   void push(T value) {
+      Item *pitem = new Item();
+      pitem->value = value;
+      pitem->next = NULL;
+      if (first == NULL) {
+         first = last = pitem;
+         _size = 1;
+         return;
+      }
+      last->next = pitem;
+      last = pitem;
+      _size++;
+   }
+
+   int size() {
+      return _size;
+   }
+
+   template <typename U>
+   friend ostream &operator<<(ostream &os, Queue<U> &q);
+
+   template <typename U>
+   friend istream &operator>>(istream &is, Queue<U> &q);
+
+   // Pre: i està entre 0 i la mida de la cua implícita menys 1.
+   // Post: Retorna l'i-èssim valor de la cua implícita (indexat començant des de 0).
+   // Descomenteu les següents dues linies i implementeu el mètode:
+   T operator[](int i) const {
+      Item *item = first;
+      while (i > 0) {
+         item = item->next;
+         --i;
+      }
+      return item->value;
+   }
 };
 
-
-template<typename U>
-ostream &operator<<(ostream &os, Queue<U> &q)
-{
-  os << q._size;
-  for (typename Queue<U>::Item *item = q.first; item != NULL; item = item->next)
-    os << " " << item->value;
-  return os;
+template <typename U>
+ostream &operator<<(ostream &os, Queue<U> &q) {
+   os << q._size;
+   for (typename Queue<U>::Item *item = q.first; item != NULL; item = item->next)
+      os << " " << item->value;
+   return os;
 }
 
-template<typename U>
-istream &operator>>(istream &is, Queue<U> &q)
-{
-  int size;
-  is >> size;
-  if (size == 0) {
-    q = Queue<U> ();
-    return is;
-  }
-  for (int i = 0; i < size; ++i) {
-    U x;
-    cin >> x;
-    q.push(x);
-  }
-  return is;
+template <typename U>
+istream &operator>>(istream &is, Queue<U> &q) {
+   int size;
+   is >> size;
+   if (size == 0) {
+      q = Queue<U>();
+      return is;
+   }
+   for (int i = 0; i < size; ++i) {
+      U x;
+      cin >> x;
+      q.push(x);
+   }
+   return is;
 }
