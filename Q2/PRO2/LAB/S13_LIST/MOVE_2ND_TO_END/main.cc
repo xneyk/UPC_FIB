@@ -46,25 +46,47 @@ int main()
             cin >> c.word;
             l.push_front(c);
         } else if (command == "pop_back") {
+            List<Container>::iterator itaux = l.end();
+            itaux--;
+            if (itaux == it) {
+                cout << "Error pop_back" << endl;
+                exit(0);
+            }
             l.pop_back();
         } else if (command == "pop_front") {
+            if (it == l.begin()) {
+                cout << "Error pop_front" << endl;
+                exit(0);
+            }
             l.pop_front();
         } else if (command == "it++") {
+            if (it == l.end()) {
+                cout << "Error it++" << endl;
+                exit(0);
+            }
             it++;
         } else if (command == "it--") {
+            if (it == l.begin()) {
+                cout << "Error it--" << endl;
+                exit(0);
+            }
             it--;
-        } else if (command == "swapFirstLast") {
-            l.swapFirstLast();
+        } else if (command == "moveSecondToLast") {
+            l.moveSecondToLast();
         } else if (command == "*it") {
+            if (it == l.end()) {
+                cout << "Error *it" << endl;
+                exit(0);
+            }
             cout << (*it).word << endl;
+        } else if (command == "print") {
+            bool writespace = false;
+            for (List<Container>::iterator it = l.begin(); not(it == l.end()); it++) {
+                if (writespace) cout << " ";
+                writespace = true;
+                cout << (*it).word;
+            }
+            cout << endl;
         }
-        // else if (command == "cout") {
-        //     it = l.begin();
-        //     while (it != l.end()) {
-        //         cout << (*it).word << ' ';
-        //         ++it;
-        //     }
-        //     cout << endl;
-        // }
     }
 }

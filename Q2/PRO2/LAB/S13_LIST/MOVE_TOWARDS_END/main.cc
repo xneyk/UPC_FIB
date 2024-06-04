@@ -35,6 +35,7 @@ int main()
 {
     List<Container> l;
     List<Container>::iterator it = l.begin();
+    List<Container>::iterator itaux = l.begin();
     string command;
     while (cin >> command) {
         if (command == "push_back") {
@@ -51,20 +52,14 @@ int main()
             l.pop_front();
         } else if (command == "it++") {
             it++;
+            itaux++;
         } else if (command == "it--") {
             it--;
-        } else if (command == "swapFirstLast") {
-            l.swapFirstLast();
+            itaux--;
+        } else if (command == "moveTowardsEnd") {
+            l.moveTowardsEnd(it);
         } else if (command == "*it") {
-            cout << (*it).word << endl;
+            cout << (*itaux).word << endl;
         }
-        // else if (command == "cout") {
-        //     it = l.begin();
-        //     while (it != l.end()) {
-        //         cout << (*it).word << ' ';
-        //         ++it;
-        //     }
-        //     cout << endl;
-        // }
     }
 }

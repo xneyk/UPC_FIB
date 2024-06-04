@@ -51,20 +51,14 @@ int main()
             l.pop_front();
         } else if (command == "it++") {
             it++;
+        } else if (command == "++it") {
+            ++it;
         } else if (command == "it--") {
             it--;
-        } else if (command == "swapFirstLast") {
-            l.swapFirstLast();
+        } else if (command == "--it") {
+            --it;
         } else if (command == "*it") {
             cout << (*it).word << endl;
         }
-        // else if (command == "cout") {
-        //     it = l.begin();
-        //     while (it != l.end()) {
-        //         cout << (*it).word << ' ';
-        //         ++it;
-        //     }
-        //     cout << endl;
-        // }
     }
 }
