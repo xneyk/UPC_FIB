@@ -1,0 +1,20 @@
+/* Pre: cert */
+/* Post: el resultat es el primer node de l'arbre de sumes */
+node_arbre* build_nodes(node_arbre *node, int value) const {
+   if (node != nullptr) {
+      node_arbre *result = new node_arbre;
+
+      result->info = node->info + value;
+      result->segE = build_nodes(node->segE, result->info);
+      result->segD = build_nodes(node->segD, result->info);
+      
+      return result;
+   }
+   return nullptr;
+}
+
+/* Pre: cert */
+/* Post: l'arbre asum és l'arbre suma del p.i. */
+void arb_sumes(Arbre<int> &asum) const {
+   asum.primer_node = build_nodes(primer_node, 0);
+}

@@ -37,6 +37,7 @@
       "*.tcc": "cpp",
       "__tree": "cpp",
       "format": "cpp",
-      "span": "cpp"
+      "span": "cpp",
+      "__locale": "cpp"
    }
 }
