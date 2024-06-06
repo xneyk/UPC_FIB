@@ -142,24 +142,124 @@ class Arbre {
 
    // Extensi�n -----------------------------------------------------
 
-   // PRE: root != nullptr
-   // POST: el resultat es la suma del cami de suma maxima de root.
-   T max_suma_cami(node_arbre *root) const {
-      int left = 0, right = 0;
-      if (root->segE) left = max_suma_cami(root->segE);
-      if (root->segD) right = max_suma_cami(root->segD);
-
-      return root->info + max(left, right);
+   void inc(const T& k) {
+      /* Pre: a=A; el tipus T te l'operacio suma */
+      /* Post: a Es com A pero havent sumat k a tots els seus elements */
+      inc_node(primer_node, k);
    }
 
-   /* Pre: el parametre implicit no es buit */
-   /* Post: el resultat es la suma del cami de suma maxima del parametre implicit */
-   T max_suma_cami() const {
-      if (primer_node != nullptr) return max_suma_cami(primer_node);
-      else return 0;
+   static void inc_node(node_arbre* n, T k) {
+      /* Pre: cert */
+      /* Post: el node apuntat per n i tots els seus seguents tenen al seu camp
+         info la suma de k i el seu valor original */
+      if (n != NULL) {
+         n->info += k;
+         inc_node(n->segE, k);
+         inc_node(n->segD, k);
+      }
    }
 
-   // #include "program.hh"
+   void subst(T x, const Arbre& as) {
+      /* Pre: a=A; el tipus T te l'operacio == */
+      /* Post: a Es com A pero havent substituit les fulles que contenien x
+           per l'arbre as */
+      subst_node(primer_node, x, as.primer_node);
+   }
+
+   static void subst_node(node_arbre*& n, T x, node_arbre* ns) {
+      /* Pre: cert */
+      /* Post: els nodes de la jerarquia de nodes que comenca al node apuntat per n
+     tals que el seu camp info valia x i no tenien seguents han estat substituits
+     per una copia de la jeraquia de nodes que comenca al node apuntat per ns */
+      if (n != NULL) {
+         if (n->info == x and n->segE == NULL and n->segD == NULL)
+            n = copia_node_arbre(ns);
+         else {
+            subst_node(n->segE, x, ns);
+            subst_node(n->segD, x, ns);
+         }
+      }
+   }
+
+   int tam()
+   /* Pre: cert */
+   /* Post: el resultat es el nombre de nodes del p.i. */
+   {
+      return tam_node(primer_node);
+   }
+
+   static int tam_node(node_arbre* n)
+   /* Pre: cert */
+   /* Post: el resultat es el nombre de nodes descendents de n, ell mateix inclos */
+   {
+      int t;
+      if (n == NULL)
+         t = 0;
+      else
+         t = 1 + tam_node(n->segE) + tam_node(n->segD);
+      return t;
+   }
+
+   static void sumar(node_arbre* m, node_arbre* n) {
+      int fills = 0;
+      if (m->segE != NULL) {
+         n->segE = new node_arbre;
+         sumar(m->segE, n->segE);
+         fills += n->segE->info;
+      } else
+         n->segE = NULL;
+      if (m->segD != NULL) {
+         n->segD = new node_arbre;
+         sumar(m->segD, n->segD);
+         fills += n->segD->info;
+      } else
+         n->segD = NULL;
+      n->info = m->info + fills;
+   }
+
+   void sumes(Arbre<int>& asum) const {
+      asum.primer_node = new node_arbre;
+      sumar(primer_node, asum.primer_node);
+   }
+
+   // --- --- --- --- --- //
+   /* Pre: n != nullptr */
+   node_arbre* findNode(node_arbre *n, const T &x, int current_depth, int &depth_found) {
+      if (n != nullptr) {
+         if (n->info == x) {
+            depth_found = current_depth;
+            return n;
+         }
+         node_arbre *left = findNode(n->segE, x, current_depth + 1, depth_found);
+         int left_depth_found = depth_found;
+         node_arbre *right = findNode(n->segD, x, current_depth + 1, depth_found);
+         
+         if (left != nullptr and right != nullptr) {
+            if (left_depth_found > depth_found) return right;
+            else return left;
+         }
+         else if (left == nullptr) return right;
+         else return left;
+      }
+      
+      return nullptr;
+   }
+
+   /* Pre: p.i. = A, asub es buit */
+   /* Post: si A conte x, asub es el subarbre d'A resultat de la cerca;
+      si A no conte x, asub es buit */
+   void sub_arrel(Arbre& asub, const T& x) {
+      node_arbre *searching;
+      if (primer_node != nullptr) {
+         int found_depth = -1;
+         searching = findNode(primer_node, x, 0, found_depth);
+         if (searching != nullptr) { // found
+            asub.primer_node = copia_node_arbre(searching);
+         }
+      }
+   }
+
+// #include "program.hh"
 };
 
 #endif
