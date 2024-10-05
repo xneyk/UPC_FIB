@@ -1,0 +1,1 @@
+17: Hemos usado la flag -c. #gcc -c mis_funciones.c
