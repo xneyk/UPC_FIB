@@ -1,0 +1,59 @@
+EX1: ejemplo_fork1
+- El padre muestra: Soy el proceso 15378 y el hijo muestra: Soy el proceso 15379. Esto lo podemos afirmar debido a al orden en que se muestran los mensajes.
+
+EX2: ejemplo_fork2
+- El mensaje que muestra el programa es:
+Antes del fork: Soy el proceso 15689
+PADRE: Soy el proceso 15689
+Los DOS: Soy el proceso 15689
+HIJO: Soy el proceso 15690
+Los DOS: Soy el proceso 15690
+
+EX3: ejemplo_fork3
+- El mensaje que muestra el programa es:
+Antes del fork: Soy el proceso 15829
+PADRE: Soy el proceso 15829
+Solo lo ejecuta el padre: Soy el proceso 15829
+HIJO: Soy el proceso 15832
+- A diferencia del anterior ejemplo, aqui la linea de "Solo lo ejecuta el padre: ..." solo la ejecuta el proceso padre debido a que el proceso hijo muere en la parte del código exclusiva del hijo.
+
+EX4: ejemplo_fork4
+Antes del fork: Soy el proceso 16093
+PADRE: Soy el proceso 16093
+Solo lo ejecuta el padre: Soy el proceso 16093
+HIJO: Soy el proceso 16094
+HIJO acaba: Soy el proceso 16094
+- La ejecución la acaba antes el padre, no obstante eso no significa que el proceso padre haya muerto.
+
+EX5: ejemplo_fork5
+Antes del fork: Soy el proceso 17301
+PADRE: Soy el proceso 17301
+HIJO: Soy el proceso 17302
+HIJO:La variable_global vale A y la local a
+PADRE:La variable_global vale A y la local a
+Solo lo ejecuta el padre: Soy el proceso 17301
+- Como podemos ver, primero "habla" el proceso padre, seguidamente se ejecuta el proceso hijo y, una vez este ha acabado, acaba de ejecutar el padre. Esto debido al waitpid()
+
+EX6: ejemplo_fork6
+- No podemos asegurar que la salida siempre sea la mísma, puesto que el padre en ningún momento espera a que el proceso hijo acabe, por ende, la salida se puede ver afectada por el tiempo que permanezca cada uno de los procesos en la CPU, pues esto lo controla el S.O. y no nosotros.
+
+EX7: ejemplo_fork7
+- No compila debido a que estamos tratando de usar en la funcion Escribe_variables() la variable local definida en el main.
+- Esto no tiene nada que ver con estar creando procesos, es un problema de scope.
+- La solución esta en pasarle a la funcion la variable local como parametro.
+
+EX8: ejemplo_exec1
+- En primer lugar el programa ejecuta el codigo C que escribe el pid del proceso por terminal, seguidamente, gracias a execlp() el proceso muta para pasar a ejecutar un ls.
+- La razon por la que aparece una única vez en pantalla el mensaje con el pid del proceso es debido a que el proceso muta a un ls, por lo que todas las lineas de código que vengan por debajo de la instrucción execlp no van a ser ejecutadas; en ningun momento se esta creando un proceso nuevo, sino que el mismo proceso esta cambiando el programa que ejecuta.
+
+EX9: ejemplo_exec2
+- El programa imprime un mesaje con su número de proceso, seguidamente el proceso muta para ejecutar el ejemplo_fork1.
+- Los mesajes que aparecen en pantalla son:
+Soy el proceso: 21429
+Soy el proceso 21429
+Soy el proceso 21430
+- Se ejecutan únicamente dos procesos.
+
+EX10: man
+- Pertenecen a la sección 2: "2. System Calls Manual".
+- He consultado la pagina del man para saber el nombre de la sección 2...

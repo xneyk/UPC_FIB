@@ -34,6 +34,7 @@ main (int argc, char *argv[])
 
     default:                   /* (pid !=0) && (pid !=-1) */
       /* Escribe aqui el codigo del padre */
+      waitpid(pid, 0, 0); // Espera a que el hijo haya terminado, (este en zombie).
       sprintf (buffer, "PADRE: Soy el proceso %d\n", getpid ());
       write (1, buffer, strlen (buffer));
 
