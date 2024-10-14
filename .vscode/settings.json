@@ -65,6 +65,14 @@
       "stdexcept": "cpp",
       "typeinfo": "cpp",
       "algorithm": "cpp",
-      "mis_funciones.h": "c"
+      "mis_funciones.h": "c",
+      "print": "cpp",
+      "atomic": "cpp",
+      "bit": "cpp",
+      "compare": "cpp",
+      "memory_resource": "cpp",
+      "numeric": "cpp",
+      "random": "cpp",
+      "type_traits": "cpp"
    }
 }
