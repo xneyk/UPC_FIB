@@ -1,0 +1,40 @@
+-- alrm 1 --
+1: cuando pasan 5 segundos nada, el proceso muere despues de 10 segundos,
+pues es el tiempo para el que esta programada la alarma.
+2: el comportamiento es el mismo (el proceso muere), no obstante, el mensaje
+es distinto:
+caso alarm: 	[1]    94835 alarm      ./alarm1
+caso kill:	[1]    94504 killed     ./alarm1
+3: Los mensajes los muestra el proceso del shell y recoge el estado de
+finalización del proceso con la llamada a waitpid para esperar su muerte y,
+a continuación, descodificar la causa de la muerte almacenada en el
+parametro "int *stat_loc"
+4: Tal y como esta el codigo nunca se ejecuta, pues el proceso siempre
+muere estando en sigsuspend. Si la llamada fallase entonces si que se
+ejecutaria.
+-- alrm 2 -- 
+1: El comportamiento esperado es que el proceso mande un mensaje cada 10
+segundos hasta llegar a los 100 totales. El control de tiempo no ha
+funcionado como se esperaba ya que el control es a traves del signal alrm
+y podemos "adelantar" el tiempo entre mensajes haciendo kill -ALRM <pid>
+2: No, hay algunos signals como SIGKILL o SIGSTOP
+3: alarm() nos devuelve el tiempo que le faltaba al temporizador para
+llegar a 0. Una manera de arreglar el codigo seria comprovar que la llamada
+a alarm(10) devuelve siempre 0, i en caso de no ser asi llamar nuevamente a alarm(10 + tiempo que quedava).
+-- alrm 3 --
+1: Lo reciben los dos, podemos verlo tanto en el codigo (ya que aunque
+lo que se hereda es la forma de tratar y no las alarmas pendientes), la
+llamada a alarm(10) se ejecuta despues del fork) y tambien podemos
+comprovarlo ejecutando ./alarm3 i viendo los procesos activos, para saber
+sus pids, acto seguido nos fijamos en los mensajes y observamos que ambos
+imprimen el mensaje.
+-- alarm 4 --
+1: El hijo programa un total de 11 alarmas, el padre no programa ninguna, es
+por eso que se queda en sigsuspend y nunca se desbloquea. Las alarmas solo
+las recibe el hijo que es quien las programa, el padre se queda bloqueado
+esperando que le llegue un SIGALRM, como el no ha programado ninguno, nunca
+se desbloqueara (a no ser que le mandemos nosotros uno con un kill -alrm,
+que es principalmente lo que me ha ayudado a confirmar lo que habia
+entendido tras leer el codigo).
+-- ejemplo_waitpid -- 
+
