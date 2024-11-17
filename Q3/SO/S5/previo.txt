@@ -1,0 +1,14 @@
+1. El comando nm nos muestra los siguientes tipos de simbolos:
+   U --> undefined
+   A --> absolute
+   T --> sección text del programa
+   D --> sección data del programa
+   B --> sección bss
+   C --> sección de código del programa
+   S --> sección distinta a las anteriormente nombradas
+   I --> simbolo indirecto.
+2. Es posible saber la direccion de la variable j (0000000000000004 C _j), pues es una variable global. Por otro lado, no es posible conocer la de i, puesto que se trata de una variable local y su direccion pertenecerá a la pila de main().
+3. La funcion suma se encuentra en la dirección 0000000000000000 (0000000000000000 T _suma).
+4. gcc -static -o mem1_previo mem1_previo.c
+5. Al estar ejecutandolo desde una maquina con macOS no me es posible visitar /proc, aun asi, la diferencia entre las dos ejecuciones es bastante notoria:
+   En primer lugar, en la version original del programa siempre se reserva el mismo tamaño de memoria (4096*4 bytes) y se hace en la region de datos del programa. Por otro lado, la segunda version del programa no siempre reserva la misma cantidad de datos, pues dependera del tamaño del vector. A diferencia de la primera version, esta usa memoria dinamica, por lo que este vector se encontrara en la region del heap.
