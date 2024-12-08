@@ -76,6 +76,14 @@
       "type_traits": "cpp",
       "assert.h": "c",
       "unistd.h": "c",
-      "string.h": "c"
+      "string.h": "c",
+      "charconv": "cpp",
+      "condition_variable": "cpp",
+      "numbers": "cpp",
+      "chrono": "cpp",
+      "system_error": "cpp",
+      "stop_token": "cpp",
+      "text_encoding": "cpp",
+      "thread": "cpp"
    }
 }

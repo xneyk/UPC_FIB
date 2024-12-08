@@ -1,0 +1,15 @@
+1. mknod named_pipe p
+   cat exClientSocket.c > named_pipe   (shell_1)
+   cat named_pipe                      (shell_2)
+
+2. No es possible comunicar dos procesos a través d'una pipe sense nom des de dues shell diferents ja que
+   les pipe sense nom només ens permeten comunicar procesos emparentats. En haver estat llençats desde dues
+   terminals diferents ==> no son procesos emparentats.
+
+3. close(1);   // tancament del canal estandard d'escriptura
+   dup(4);     // dupliquem canal d'escriptura de la pipe en el primer canal lliure
+               // (hem tancat 1, 0 esta obert ==> el primer canal lliure és 1)
+   close(4);   // tancament del canal anterior d'escriptura de la pipe.
+
+4. exServerSocket.c crea un socket, escriu i llegeix d'ell i en acabar tanca i elimina el socket.
+   exClientSocket.c es connecta a un socket ja existent i escriu i llegeix d'ell.

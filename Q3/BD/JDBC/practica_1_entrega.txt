@@ -1,0 +1,78 @@
+Execució 1:
+   No s'ha produït cap efecte sobre la base de dades ja que la transacció no confirma
+   (acaba amb rollback --> desfa tots els canvis).
+
+Execució 2:
+   En aquest cas, si s'ha produït el canvi. S'ha realitzat l'inserció d'una nova fila
+   i veiem el canvi efectuat a la base de dades perque s'ha confirmat la transacció. És a dir,
+   la inserció ha estat definitiva.
+
+Execució 3:
+   a) 
+      Excepcio: 
+      El getSQLState es: 23505
+      El getMessage es: ERROR: duplicate key value violates unique constraint "professors_pkey"
+      Detail: Key (dni)=(555) already exists.
+
+      Això s'ha produït degut a que s'ha tractat d'insertar novament la fila que ja havia estat
+      insertada anteriorment. Per tant, ens ha donat un error per violar la restricció de clau primaria.
+   b)
+      No s'ha inserit la fila, degut a l'excepció.
+   c)
+      Podriem modificar el bloc catch de la seguent manera:
+         catch (SQLException se) {
+            if (se.getSQLState().equals("23505")) { // unique_violation
+                  System.out.println("El professor ja existeix");
+            }
+         }
+
+Execució 4:
+   Resultat:
+   dni: 111 nomprof: ruth
+   dni: 222 nomprof: ona
+   dni: 333 nomprof: anna
+
+
+      // IMPLEMENTAR
+            // printar el dni i el nom dels professors que tenen els tel�fons amb n�mero inferior al que s'indica en la variable buscaTelf
+            // en cas que no hi hagi cap professor amb aquest tel�fon printar "NO TROBAT"     
+            String buscaTelf="3334";
+            
+            Statement profWithMinorTel = c.createStatement();
+            ResultSet result_profWithMinorTel = profWithMinorTel.executeQuery(
+                  "select * "
+                  + "from professors "
+                  + "where telefon < '"+buscaTelf+"';");
+            
+            int result_width = 0;
+            while (result_profWithMinorTel.next()) {
+               
+               result_width += 1;
+               String r_dni = result_profWithMinorTel.getString("dni");
+               String r_nomprof = result_profWithMinorTel.getString("nomprof");
+               
+               System.out.println("dni: " + r_dni + " " + "nomprof: " + r_nomprof + " " + "telefon: " + r_telefon);
+            }
+            // Podem fer-ho així ja que en si el resultat ha esta 0 vol dir que no s'ha impres res en pantalla
+            // Per altra banda, si s'ha imprés quelcom, "result_width" serà com a mínim 1.
+            if (result_width == 0) System.out.println("NO TROBAT");
+            
+            
+            // Commit i desconnexio de la base de dades
+            c.commit();
+            c.close();
+            System.out.println ("Commit i desconnexio realitzats correctament.");
+         }
+         
+         catch (SQLException se) {
+            System.out.println ("Excepcio: ");System.out.println ();
+            System.out.println ("El getSQLState es: " + se.getSQLState());
+            System.out.println ();
+            System.out.println ("El getMessage es: " + se.getMessage());
+            
+            if (se.getSQLState().equals("23505")) { // unique_violation
+                  System.out.println("El professor ja existeix");
+            }
+         }
+      }
+   }
