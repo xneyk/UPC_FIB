@@ -1,0 +1,63 @@
+Pregunta 1:
+	111	ruth
+	222	ona
+	333	anna
+	NO TROBAT
+Pregunta 2:
+	El resultat es la quantitat de files afectades:
+		1 row affected
+	
+	L'unica restricció de taula és el check de la superficie, per tant, si es produeix
+	una excepció check_violation només pot haver estat per aquesta raó.
+
+		try {
+			...
+			// IMPLEMENTAR CONSULTA
+			String[] telfsProf = {"3111", "3222", "3333", "4444"};
+			
+			PreparedStatement getTeacherByPhone = c.prepareStatement(
+				"select dni, nomprof "
+				+ "from professors "
+				+ "where telefon = ? ;"
+			);
+			
+			ResultSet teachers = null;
+			for (String tel : telfsProf) {
+				getTeacherByPhone.setString(1, tel);
+				teachers = getTeacherByPhone.executeQuery();
+				if (teachers.next()) { // true if exists a result (only can be one result bc unique key)
+					String dni = teachers.getString("dni");
+					String name = teachers.getString("nomprof");
+					System.out.println(dni + " " + name);
+				} else {
+					System.out.println("NO TROBAT");
+				}
+			}
+			getTeacherByPhone.close();
+			
+			// IMPLEMENTAR CANVI BD
+			Statement updateSurface = c.createStatement();
+			int officesAffected = updateSurface.executeUpdate("""
+				update despatxos d
+				set superficie = superficie + 3
+				where
+					modul = 'omega' and
+					not exists(
+						select * from assignacions a
+						where
+							a.modul = 'omega' and
+							a.numero = d.numero and
+							a.InstantFi is null
+					);
+			""");
+			updateSurface.close();
+
+			System.out.println(officesAffected + " rows affected");
+			...
+		} catch (SQLException se) {
+			if (se.getSQLState().equals("23514")) {
+				// This is the only one check violation possible at this table.
+				System.out.println("Algun despatx passaria a tenir superfície superior o igual a 25");
+			}
+			...
+		}

@@ -1,0 +1,51 @@
+1.
+   Podemos saberlo con el comando df -hY, y como podemos observar vemos que en mi sistema hay 9 fs montados.
+
+Filesystem                                                Type      Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk1s1s1                                            apfs     932Gi    12Gi   556Gi     3%    404k  4.3G    0%   /
+devfs                                                     devfs    189Ki   189Ki     0Bi   100%     655     0  100%   /dev
+/dev/disk1s3                                              apfs     932Gi   3.8Gi   556Gi     1%    4.0k  5.8G    0%   /System/Volumes/Preboot
+/dev/disk1s5                                              apfs     932Gi    20Ki   556Gi     1%       0  5.8G    0%   /System/Volumes/VM
+/dev/disk1s6                                              apfs     932Gi    65Mi   556Gi     1%     884  5.8G    0%   /System/Volumes/Update
+/dev/disk1s2                                              apfs     932Gi   358Gi   556Gi    40%    3.2M  5.8G    0%   /System/Volumes/Data
+map auto_home                                             autofs     0Bi     0Bi     0Bi   100%       0     0     -   /System/Volumes/Data/home
+/dev/disk1s1                                              apfs     932Gi    12Gi   556Gi     3%    404k  4.3G    0%   /System/Volumes/Update/mnt1
+/Users/edgaraguadenadal/Downloads/Visual Studio Code.app  nullfs   932Gi   358Gi   556Gi    40%    3.2M  5.8G    0%   /private/var/folders/fl/rjzgd2qd2yx_6w2kvkngqxr00000gp/T/AppTranslocation/0CB04FA8-F705-4448-B64A-2CA205DF2502
+
+2.
+   Con la opcion -i, se nos añade mas información sobre los inodos de cada fs. Podemos observarla en la columna ifree.
+
+3.
+   Sobre el mismo comando de la pregunta 1, podemos ver la información del espacio disponible en la columna Avail.
+
+4.
+   hl_pr es un hard_link mientras que sl_pr es un symbolic (o soft) link.
+
+16777222 62146202 -rw-r--r-- 2 edgaraguadenadal staff 0 19 "Dec  8 19:48:54 2024" "Dec  8 19:48:53 2024" "Dec  8 19:48:53 2024" "Dec  8 19:45:01 2024" 4096 8 0 pr.txt
+16777222 62146202 -rw-r--r-- 2 edgaraguadenadal staff 0 19 "Dec  8 19:48:54 2024" "Dec  8 19:48:53 2024" "Dec  8 19:48:53 2024" "Dec  8 19:45:01 2024" 4096 8 0 hl_pr
+16777222 62146405 lrwxr-xr-x 1 edgaraguadenadal staff 0 6  "Dec  8 19:45:18 2024" "Dec  8 19:45:18 2024" "Dec  8 19:45:18 2024" "Dec  8 19:45:18 2024" 4096 0 0 sl_pr
+
+   pr.txt: tiene dos links.
+   hl_pr: tiene dos links.
+   sl_pr: tiene un link.
+   hl_pr y pr.txt tienen el mismo numero de inodo, mientras que sl_pr no.
+
+5.
+   hl_pr:
+cat      esto es una prueba
+readlink error
+
+   sl_pr:
+esto es una prueba
+pr.txt
+
+el readlink de hl_pr ha donat error degut a que un hardlink no es exactament un enllaç cap a un fitxer, sino que es un enllaç a nivell de la taula del directori on es relaciona nom de fitxer amb inodo.
+
+6.
+   hl_pr:
+cat      esto es una prueba --> segueix podent ja que el hardlink segueix apuntant a l'inodo, ja que s'ha borrat el nom d'arxiu pero no l'inodo.
+readlink error --> no es un softlink
+
+   sl_pr:
+cat   error, no such file or directory --> com era d'esperar doncs el fitxer al que apunta ja no existeix.
+pr.txt
