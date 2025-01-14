@@ -85,6 +85,7 @@
       "stop_token": "cpp",
       "text_encoding": "cpp",
       "thread": "cpp",
-      "__availability": "cpp"
+      "__availability": "cpp",
+      "wait.h": "c"
    }
 }
