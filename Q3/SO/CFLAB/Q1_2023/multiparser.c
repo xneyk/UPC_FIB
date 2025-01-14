@@ -84,7 +84,6 @@ int main(int argc, char **argv) {
          }
 
       } else if (fork_res == 0) { // child code
-         
          // Block child process
          int blocking_pipe = open("namedpipe", O_RDONLY); // this open will block the process till pather open the pipe.
          sprintf(msg, "Proceso child %d despertado\n", i);
