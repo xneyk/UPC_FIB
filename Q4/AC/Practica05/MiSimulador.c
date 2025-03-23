@@ -1,14 +1,23 @@
 #include "CacheSim.h"
+#include <stdio.h>
 
 /* Posa aqui les teves estructures de dades globals
  * per mantenir la informacio necesaria de la cache
  * */
+
+// gcc -m32 CacheSim.o MiSimulador.c tiempo.c -o sim
 
 #define CACHE_LINES 128    // 2^12 Bytes Cache & 2^5 Bytes per block ==> 2^7 lines = 128 lines
 #define FREE_TAG 0x100000  // A TAG has 20 bits (5 hexadecimal digits) ==> 0x100000 is the first non possible TAG.
 
 unsigned int tag_memory[CACHE_LINES];
 
+/**
+ * Performance Couters
+ */
+
+unsigned int n_access;
+unsigned int n_miss;
 
 /* La rutina init_cache es cridada pel programa principal per
  * inicialitzar la cache.
@@ -20,6 +29,9 @@ void init_cache() {
    for (int i = 0; i < CACHE_LINES ; ++i) {
       tag_memory[i] = FREE_TAG;
    }
+
+   n_access = 0;
+   n_miss = 0;
 }
 
 /* La rutina reference es cridada per cada referencia a simular */
@@ -36,6 +48,8 @@ void reference(unsigned int address) {
    t1 = GetTime();
    /* Escriu aqui el teu codi */
 
+   ++n_access; // cache access counter
+
    byte = address & 0x000000000000001f;      // byte number are 5 less significant bits
    bloque_m = address >> 5;                  // memory_block = address / BLOCK_SIZE
    linea_mc = bloque_m & 0x000000000000007f; // 2^7 = cache size ==> n_block mod 2^7 are 7 less significant bits of n_block.
@@ -46,8 +60,10 @@ void reference(unsigned int address) {
    
    if (replacement) tag_out = tag_memory[linea_mc];
 
-   if (miss) tag_memory[linea_mc] = tag;
-
+   if (miss) {
+      tag_memory[linea_mc] = tag;
+      ++n_miss;
+   }
    /* La funcio test_and_print escriu el resultat de la teva simulacio
     * per pantalla (si s'escau) i comproba si hi ha algun error
     * per la referencia actual. Tambe mesurem el temps d'execucio
@@ -60,4 +76,12 @@ void reference(unsigned int address) {
 /* La rutina final es cridada al final de la simulacio */
 void final() {
    /* Escriu aqui el teu codi */
+   printf("-\n--- Cache Performance Data ---\n");
+   printf("- Cache accesses: %*u\n", 35-23, n_access);
+   printf("- Miss: %*u\n", 35-13, n_miss);
+   printf("- Hit: %*u\n", 35-12, n_access - n_miss);
+   double miss_rate = ((double) n_miss)/((double) n_access);
+   printf("- Miss Rate: %*f\n", 35-18, miss_rate);
+   printf("- Hit Rate: %*f\n", 35-17, 1 - miss_rate);
+   printf("\n");
 }
