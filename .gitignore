@@ -3,7 +3,7 @@
 *.exe
 *.tar
 *.tar.gz
-*.o
+
 # Ignorem la carpeta del segon MOCK_EXAM ja que no estan resolts tots els exercicis. #
 Q1/PRO1/MOCK_EXAM2/
 Q2/PRO2/LAB/pro2
