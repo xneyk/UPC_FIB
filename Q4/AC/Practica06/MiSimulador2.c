@@ -19,7 +19,9 @@
 #define OFFSET_BITS	5 // 32 = 2^5
 #define LINE_BITS		7 // 4096 / 32 = 128 = 2^7
 
+
 struct cache_line {
+   unsigned char dirty;
    unsigned char valid;
    unsigned int tag;
 };
@@ -42,6 +44,7 @@ void init_cache() {
 
    for (int i = 0; i < (CACHE_SIZE / BLOCK_SIZE); ++i) {
       tag_memory[i].valid = false;
+      tag_memory[i].dirty = false;
    }
 }
 
@@ -69,22 +72,23 @@ void reference(unsigned int address, unsigned int LE) {
 	tag = bloque_m >> LINE_BITS;
 	
 	miss = !(tag_memory[linea_mc].valid && tag_memory[linea_mc].tag == tag);
-	replacement = miss && !LE && tag_memory[linea_mc].valid; // write no allocate, nomes hi ha replacement si es lectura
+	replacement = miss && tag_memory[linea_mc].valid;
 
-	lec_mp = miss && !LE;
-	esc_mp = LE; // es una escriptura
+   esc_mp = replacement && tag_memory[linea_mc].dirty; // S'escriu en replace d'un block modificat
+   lec_mp = miss;
+   
+   if (miss) {
+      ++n_miss;
+      mida_lec_mp = BLOCK_SIZE;
+      if (tag_memory[linea_mc].dirty) mida_esc_mp = BLOCK_SIZE;
 
-	if (miss) { // l'if es fa amb aquesta estructura pel ++n_miss. del contrari es faria if (miss && !LE)
-		++n_miss;
-      if (!LE) { // si es miss de lectura portem el bloc a MC
-         mida_lec_mp = BLOCK_SIZE;
-         tag_out = tag_memory[linea_mc].tag;
-         tag_memory[linea_mc].valid = true;
-         tag_memory[linea_mc].tag = tag;
-      }
-	}
+      tag_out = tag_memory[linea_mc].tag;
+      tag_memory[linea_mc].tag = tag;
+      tag_memory[linea_mc].dirty = false;
+      tag_memory[linea_mc].valid = true;
+   }
 
-	if (LE) mida_esc_mp = 1;
+   if (LE) tag_memory[linea_mc].dirty = true; // si es una escriptura modifica el block sigui hit o miss
 
    /* La funcio test_and_print escriu el resultat de la teva simulacio
     * per pantalla (si s'escau) i comproba si hi ha algun error
