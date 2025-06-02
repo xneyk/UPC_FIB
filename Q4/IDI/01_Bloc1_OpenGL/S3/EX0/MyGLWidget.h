@@ -4,7 +4,6 @@
 #include <QOpenGLWidget>
 #include <QKeyEvent>
 
-#include "glm/gtc/matrix_transform.hpp"
 #include "glm/glm.hpp"
 
 class MyGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
@@ -28,21 +27,18 @@ class MyGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
       // keyPressEvent - Es cridat cada vegada que es prem una tecla
       virtual void keyPressEvent(QKeyEvent *e);
 
-      // modelTransform - Crea la TG del model que volem pintar.
-      void modelTransform();
-
    private:
       void creaBuffers();
       void carregaShaders();
 
       // attribute locations
       GLuint vertexLoc;
-      GLuint transLoc;
+      GLuint scaleVarLoc;
 
       // Program
       QOpenGLShaderProgram *program;
 
-      float tx = 0.0f, ty = 0.0f; // Valors per a la translacio del objecte.
+      float uniform_scale = 0.5f;
 
       GLuint VAO1;
       GLint ample, alt;

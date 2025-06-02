@@ -29,9 +29,6 @@ void MyGLWidget::paintGL() {
 
    glClear(GL_COLOR_BUFFER_BIT);  // Esborrem el frame-buffer
 
-   // Obtenim i enviem al shader la TG del model que volem pintar.
-   modelTransform();
-
    // Activem l'Array a pintar
    glBindVertexArray(VAO1);
 
@@ -58,32 +55,18 @@ void MyGLWidget::resizeGL(int w, int h) {
 void MyGLWidget::keyPressEvent(QKeyEvent *e) {
    makeCurrent(); // Fa actiu el nostre context d'OpenGL
    switch (e->key()) {
-      case Qt::Key_Left:
-         tx -= 0.1f;
+      case Qt::Key_S :
+         uniform_scale += 0.1f;
+         glUniform1f(scaleVarLoc, uniform_scale);
          break;
-      case Qt::Key_Right:
-         tx += 0.1f;
-         break;
-      case Qt::Key_Down:
-         ty -= 0.1f;
-         break;
-      case Qt::Key_Up:
-         ty += 0.1f;
+      case Qt::Key_D :
+         uniform_scale -= 0.1f;
+         glUniform1f(scaleVarLoc, uniform_scale);
          break;
       default:
          e->ignore();
    }
    update(); // Cal forçar el repintat ja que ha canviat la escena.
-}
-
-void MyGLWidget::modelTransform() {
-   glm::mat4 TG = glm::mat4(1.0); // Inicialment la identitat.
-   
-   TG = glm::translate(TG, glm::vec3(tx, ty, 0.0f)); // Translació en funció de parametres amb KeyEvents
-
-   // Obtenim identificador per a l'atribut "TG" del vertex shader
-   glUniformMatrix4fv(transLoc, 1, GL_FALSE, &TG[0][0]); // inicialitzem el valor per a la primera crida no ferla amb un valor buit.
-   transLoc = glGetUniformLocation(program->programId(), "TG");
 }
 
 void MyGLWidget::creaBuffers() {
@@ -128,4 +111,7 @@ void MyGLWidget::carregaShaders() {
 
    // Obtenim identificador per a l'atribut “vertex” del vertex shader
    vertexLoc = glGetAttribLocation(program->programId(), "vertex");
+   // Obtenim identificador per a l'atribut "scale" del vertex shader
+   glUniform1f(scaleVarLoc, 0.5f); // inicialitzem el valor per a la primera crida no ferla amb un valor buit. 
+   scaleVarLoc = glGetUniformLocation(program->programId(), "scale");
 }
