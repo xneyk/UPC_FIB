@@ -1,6 +1,7 @@
 // MyGLWidget.h
 #include "BL2GLWidget.h"
 #include "model.h"
+#include <QTimer>
 
 struct modelStruct {
    Model model;
@@ -101,4 +102,11 @@ class MyGLWidget : public BL2GLWidget {
 
       GLuint viewLoc;
       GLuint projLoc;
+
+      QTimer timer; // timer per a les animacions
+
+      float angle_patricio_animat = 0.0f;
+      public slots:
+         // Anima el Patricio 4
+         void animatePatricio4();
 };

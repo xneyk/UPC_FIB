@@ -58,6 +58,8 @@ void MyGLWidget::initializeGL() {
    creaBuffers();
    
    iniCamera(); // inicialitzem la càmera (VM&PM) i enviem els uniforms corresponents al shader.
+
+   connect(&timer, SIGNAL(timeout()), this, SLOT(animatePatricio4())); // link entre el signal del timer i l'slot
 }
 
 void MyGLWidget::paintGL() {
@@ -198,6 +200,12 @@ void MyGLWidget::carregaShaders() {
 void MyGLWidget::keyPressEvent(QKeyEvent *e) {
    makeCurrent();
    switch (e->key()) {
+      case Qt::Key_S:
+         timer.start(16);  // timer cada 16 milisegons
+         break;
+      case Qt::Key_D:
+         timer.stop();     // atura el timer
+         break;
       case Qt::Key_O:
          isPrespective = !isPrespective; // canvi entre prespectiva i ortogonal
          projectTransform();
@@ -276,6 +284,7 @@ void MyGLWidget::patricio3ModelTransform() {
 
 void MyGLWidget::patricio4ModelTransform() {
    glm::mat4 TG(1.0f);
+   TG = glm::rotate(TG, glm::radians(angle_patricio_animat), glm::vec3(0.0, 1.0, 0.0));
    TG = glm::translate(TG, glm::vec3(1.5, 1.0/2.0, 0.0));
    TG = glm::scale(TG, glm::vec3(1.0/patricio.height)); // escalat uniforme
    TG = glm::translate(TG, -patricio.center); // portem al centre de coordenades
@@ -363,4 +372,10 @@ void MyGLWidget::calcBoxContainter(modelStruct &m) {
 void MyGLWidget::setSphere(glm::vec3 p_min, glm::vec3 p_max) {
    radius = glm::distance(p_max, p_min)/2.0f;
    center = (p_max + p_min)/2.0f;
+}
+
+void MyGLWidget::animatePatricio4() {
+   makeCurrent();
+   angle_patricio_animat += 0.5f;
+   update();
 }
