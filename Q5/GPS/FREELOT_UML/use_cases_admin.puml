@@ -1,0 +1,72 @@
+@startuml free_lot
+left to right direction
+
+actor Administrador
+rectangle "Sistema d'administració" {
+   rectangle "Gestió dels sensors" {
+      ' Sensor Use Cases '
+      usecase "Crear sensor" as UC_Create_Sensor
+      usecase "Eliminar sensor" as UC_Delete_Sensor
+      usecase "Consultar estat sensor" as UC_Check_Status_Sensor
+      usecase "Modificar estat sensor" as UC_Modify_Status_Sensor
+         ' Modify Sensor Generalization
+         usecase "Definir sensor actiu" as UC_Set_Active_Sensor
+         usecase "Definir sensor desactivat" as UC_Set_Disabled_Sensor
+         usecase "Definir sensor inactiu" as UC_Set_Inactive_Sensor
+         usecase "Definir sensor en manteniment" as UC_Set_Maintenance_Sensor
+         UC_Modify_Status_Sensor <|-- UC_Set_Active_Sensor
+         UC_Modify_Status_Sensor <|-- UC_Set_Disabled_Sensor
+         UC_Modify_Status_Sensor <|-- UC_Set_Inactive_Sensor
+         UC_Modify_Status_Sensor <|-- UC_Set_Maintenance_Sensor
+   }
+
+   rectangle "Gestió de les zones" {
+      ' Zone Use Cases '
+      usecase "Afegir sensor a zona" as UC_Add_Sensor_to_Zone
+      
+      usecase "Crear zona" as UC_Create_Zone
+      usecase "Eliminar zona" as UC_Delete_Zone
+      usecase "Activar zona" as UC_Activate_Zone
+      note right of UC_Activate_Zone
+         Només si el sensor està disponible
+      end note
+      usecase "Desactivar zona" as UC_Disable_Zone
+      note right of UC_Disable_Zone
+         Només si el sensor està disponible
+      end note
+         UC_Activate_Zone .> UC_Set_Active_Sensor : <<include>>
+         UC_Disable_Zone .> UC_Set_Disabled_Sensor : <<include>>
+   }
+
+   rectangle "Gestió de places" {
+      ' Parking Lots Use Cases '
+      usecase "Crea plaça" as UC_Create_Parking
+      usecase "Modificar plaça" as UC_Modificar_Parking
+         usecase "Vincular sensor" as UC_Bind_Sensor_to_Parking
+         usecase "Desvincular sensor" as UC_Unbind_Sensor_to_Parking
+         UC_Modificar_Parking <. UC_Bind_Sensor_to_Parking : <<extends>>
+         UC_Modificar_Parking <. UC_Unbind_Sensor_to_Parking : <<extends>>
+      usecase "Eliminar plaça" as UC_Delete_Parking
+         UC_Delete_Parking .> UC_Unbind_Sensor_to_Parking : <<include>>
+      usecase "Consultar informació plaça" as UC_Check_Parking
+   }  
+}
+
+Administrador --> UC_Create_Sensor
+Administrador --> UC_Delete_Sensor
+Administrador --> UC_Modify_Status_Sensor
+Administrador --> UC_Check_Status_Sensor
+
+Administrador --> UC_Add_Sensor_to_Zone
+
+Administrador --> UC_Create_Zone
+Administrador --> UC_Delete_Zone
+Administrador --> UC_Activate_Zone
+Administrador --> UC_Disable_Zone
+
+Administrador --> UC_Create_Parking
+Administrador --> UC_Delete_Parking
+Administrador --> UC_Modificar_Parking
+Administrador --> UC_Check_Parking
+
+@enduml

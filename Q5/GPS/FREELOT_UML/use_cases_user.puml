@@ -1,0 +1,40 @@
+@startuml free_lot
+left to right direction
+actor Usuari
+rectangle "Sistema d'usuari (mòbil)" {
+   rectangle "Mapa de places lliures" {
+      usecase "Veure mapa de places lliures" as UC_Free_Parking
+         usecase "Veure tipus de plaça" as UC_Type_Parking
+         UC_Free_Parking .> UC_Type_Parking : <<include>>
+      usecase "Veure informació plaça" as UC_Info_Parking
+         usecase "Veure horari plaça" as UC_Timetable_Parking
+         usecase "Veure tarifa plaça" as UC_Price_Parking
+         UC_Info_Parking <. UC_Timetable_Parking : <<extends>>
+         UC_Info_Parking <. UC_Price_Parking : <<extends>>
+      usecase "Obtenir ruta a plaça lliure" as UC_Rute_Parking
+   }
+
+   rectangle "Mapa de calor" {
+      usecase "Veure mapa de calor" as UC_Heat_Map
+      usecase "Cerca zona" as UC_Search_Zone
+      usecase "Obtenir temps estimat d'alliberament" as UC_Mean_Time
+      note right of UC_Mean_Time
+         De cada tipus de zona (Fluid, Lleugerament estancat, Estancat)
+      end note
+      UC_Heat_Map .> UC_Mean_Time : <<include>>
+   }
+
+}
+actor Map
+
+Usuari --> UC_Free_Parking
+Usuari --> UC_Info_Parking
+Usuari --> UC_Rute_Parking
+Usuari --> UC_Heat_Map
+Usuari --> UC_Search_Zone
+
+UC_Free_Parking --> Map
+UC_Heat_Map --> Map
+
+
+@enduml
