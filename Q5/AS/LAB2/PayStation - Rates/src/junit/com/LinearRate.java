@@ -1,4 +1,7 @@
 package junit.com;
 
-public class LinearRate {
+public class LinearRate implements RateStrategy {
+    public int calculateTime(int insertedSoFar) {
+        return insertedSoFar / 5 * 2;
+    }
 }

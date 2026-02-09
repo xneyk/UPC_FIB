@@ -1,5 +1,5 @@
 package junit.com;
 
-public interface RateStarategy {
+public interface RateStrategy {
     public int calculateTime(int insertedSoFar);
 }
